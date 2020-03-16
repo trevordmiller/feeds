@@ -26,7 +26,7 @@ See [README.md](./README.md).
 
 ## Integrations
 
-- Branch protection with [GitHub settings](https://github.com/trevordmiller/extractcontent.com/settings/branches).
-- Continuous Integration / Deployment with [GitHub Actions](https://github.com/trevordmiller/extractcontent.com/actions).
-- Hosting with [GitHub Pages](https://github.com/trevordmiller/extractcontent.com/settings).
-- Domain name registration with [Hover](https://www.hover.com).
+- GitHub settings for branch protection and merge checks.
+- GitHub Actions for Continuous Integration and Continuous Deployment.
+- GitHub Pages for hosting.
+- Hover for custom domain name registration and DNS configuration.
