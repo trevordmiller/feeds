@@ -1,17 +1,16 @@
-import buildHtml from './buildHtml/buildHtml.js';
+import buildHtml from "./buildHtml/buildHtml.js";
 
 const main = async () => {
+  window.document.body.innerHTML = "<main><p>Loading...</p></main>";
 
-	window.document.body.innerHTML = '<p>Loading...</p>';
-
-	/* Side effects TODO
+  /* Side effects TODO
 	const parsedUrl = new URL(window.location.href);
 
 	const feedUrls = parsedUrl.searchParams.get("feedUrls");
 	const max = parsedUrl.searchParams.get("max");
 	*/
 
-	/*
+  /*
 	const fetchedFeeds = [
 	`<rss>
 	  <channel>
@@ -38,30 +37,36 @@ const main = async () => {
 	]
 	*/
 
-	const max = 3;
+  const max = 3;
 
-	const parseFeeds = async (feedUrls) => await Promise.all(feedUrls.map(async feedUrl => {
-	  const response = await window.fetch(feedUrl);
-	  const text = await response.text();
-	  const parsedXml = new window.DOMParser().parseFromString(text, "text/xml");
-		const xmlItems = Array.from(parsedXml.querySelectorAll("item"));
+  const parseFeeds = async feedUrls =>
+    await Promise.all(
+      feedUrls.map(async feedUrl => {
+        const response = await window.fetch(feedUrl);
+        const text = await response.text();
+        const parsedXml = new window.DOMParser().parseFromString(
+          text,
+          "text/xml"
+        );
+        const xmlItems = Array.from(parsedXml.querySelectorAll("item"));
 
-	  return ({
-		  title: parsedXml.querySelector("title").innerHTML,
-		  items: xmlItems.slice(0, max).map(xmlItem => ({
-			  title: xmlItem.querySelector('title').innerHTML,
-			  summary: 'TODO',
-			  link: xmlItem.querySelector('link').innerHTML
-		}))
-	  })
-	}));
+        return {
+          title: parsedXml.querySelector("title").innerHTML,
+          items: xmlItems.slice(0, max).map(xmlItem => ({
+            title: xmlItem.querySelector("title").innerHTML,
+            summary: "TODO",
+            link: xmlItem.querySelector("link").innerHTML
+          }))
+        };
+      })
+    );
 
-	const feedUrls = [
-		"https://mshibanami.github.io/GitHubTrendingRSS/monthly/all.xml",
-		"https://mshibanami.github.io/GitHubTrendingRSS/monthly/javascript.xml"
-	];
+  const feedUrls = [
+    "https://mshibanami.github.io/GitHubTrendingRSS/monthly/all.xml",
+    "https://mshibanami.github.io/GitHubTrendingRSS/monthly/javascript.xml"
+  ];
 
-	/* Feeds TODO
+  /* Feeds TODO
 	-   General
 		-   [IEEE computing edge](https://www.computer.org/publications/computing-edge/current-issue)
 		-   [GitHub trends](https://github.com/trending?since=monthly)
@@ -91,11 +96,11 @@ const main = async () => {
 		-   [Community](https://www.reddit.com/r/WebAssembly/top/?t=month)
 	*/
 
-	const parsedFeeds = await parseFeeds(feedUrls);
+  const parsedFeeds = await parseFeeds(feedUrls);
 
-	const builtHtml = buildHtml(parsedFeeds);
+  const builtHtml = buildHtml(parsedFeeds);
 
-	window.document.body.innerHTML = builtHtml;
-}
+  window.document.body.innerHTML = builtHtml;
+};
 
 main();

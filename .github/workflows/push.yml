@@ -1,30 +1,29 @@
 name: Push
 on: push
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Install
+        run: npm ci
+      - name: Test
+        run: npm run test
+      - name: Lint
+        run: npm run lint
   audit:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.PAT_FOR_AUTO_FORMAT }}
-    - name: Setup
-      uses: denolib/setup-deno@master
-      with:
-        deno-version: 0.x
-    - name: Test
-      run: deno test
-    - name: Lint
-      run: echo "[Once 'deno lint' is released] deno lint"
-    - name: Format
-      run: deno fmt
-    - name: Commit
-      uses: stefanzweifel/git-auto-commit-action@v4.1.1
-      with:
-        commit_message: Auto format
-    - name: Audit
-      uses: treosh/lighthouse-ci-action@v2
-      with:
-        configPath: './.github/config/local/lighthouserc.json'
-        temporaryPublicStorage: true
-        runs: 3
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Audit
+        uses: treosh/lighthouse-ci-action@v2
+        with:
+          configPath: "./.github/config/local/lighthouserc.json"
+          temporaryPublicStorage: true
+          runs: 3
