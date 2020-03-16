@@ -11,7 +11,7 @@ jobs:
       - name: Audit
         uses: treosh/lighthouse-ci-action@v2
         with:
-          urls: "https://trevordmiller.com/feeds"
+          urls: "https://extractcontent.com"
           configPath: "./.github/config/production/lighthouserc.json"
           temporaryPublicStorage: true
           runs: 3
