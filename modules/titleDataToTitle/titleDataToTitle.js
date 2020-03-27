@@ -1,7 +1,5 @@
 const titleDataToTitle = titleData => {
-  const textContent = titleData
-    .replace("<![CDATA[", "")
-    .replace("]]>", "");
+  const textContent = titleData.replace("<![CDATA[", "").replace("]]>", "");
 
   return textContent;
 };

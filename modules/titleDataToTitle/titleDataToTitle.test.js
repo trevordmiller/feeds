@@ -9,9 +9,11 @@ test("builds title text from plain text", () => {
 });
 
 test("builds title text from CDATA strings", () => {
-  const input = "<![CDATA[r/programming - Programmers generate every possible melody in MIDI]]>";
+  const input =
+    "<![CDATA[r/programming - Programmers generate every possible melody in MIDI]]>";
 
-  const output = "r/programming - Programmers generate every possible melody in MIDI";
+  const output =
+    "r/programming - Programmers generate every possible melody in MIDI";
 
   expect(titleDataToTitle(input)).toBe(output);
 });

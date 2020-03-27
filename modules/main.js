@@ -10,7 +10,8 @@ const main = async () => {
     const feeds = [
       {
         title: "IEEE",
-        url: "https://csdl-api.computer.org/api/rss/periodicals/mags/so/rss.xml",
+        url:
+          "https://csdl-api.computer.org/api/rss/periodicals/mags/so/rss.xml",
         max: 3
       },
       {
@@ -23,6 +24,51 @@ const main = async () => {
         url: "https://rss.app/feeds/qtY5lEd1YADUScA0.xml",
         max: 10
       },
+      {
+        title: "Reddit coding",
+        url: "https://rss.app/feeds/rSBtOoUKZzZLp2C2.xml",
+        max: 10
+      },
+      {
+        title: "Reddit compsci",
+        url: "https://rss.app/feeds/BqegyvjAy3vdvC7j.xml",
+        max: 10
+      },
+      {
+        title: "Reddit unix",
+        url: "https://rss.app/feeds/qqTmcUPI2lpLwj7f.xml",
+        max: 10
+      },
+      {
+        title: "Reddit vim",
+        url: "https://rss.app/feeds/I5n8lIFHsWHIS6qM.xml",
+        max: 10
+      },
+      {
+        title: "Reddit git",
+        url: "https://rss.app/feeds/Cbf3VryLJL7H4Sbz.xml",
+        max: 10
+      },
+      {
+        title: "W3C recommendations",
+        url: "https://www.w3.org/TR/?status=rec",
+        max: 3
+      },
+      {
+        title: "Reddit webdev",
+        url: "https://rss.app/feeds/4iC7UIwfHOpXpl8S.xml",
+        max: 10
+      },
+      {
+        title: "TC39 proposals",
+        url: "https://tc39.es/#proposals",
+        max: 3
+      },
+      {
+        title: "Reddit javascript",
+        url: "https://rss.app/feeds/2LYlwYdC3LgjBWPj.xml",
+        max: 10
+      }
     ];
 
     const parseFeeds = async feeds =>
@@ -36,10 +82,24 @@ const main = async () => {
           );
           const xmlItems = Array.from(parsedXml.querySelectorAll("item"));
 
+          if (xmlItems.length === 0) {
+            return {
+              title: feed.title,
+              items: [
+                {
+                  title: "Index",
+                  link: feed.url
+                }
+              ]
+            };
+          }
+
           return {
             title: feed.title,
             items: xmlItems.slice(0, feed.max).map(xmlItem => {
-              const title = titleDataToTitle(xmlItem.querySelector("title").innerHTML);
+              const title = titleDataToTitle(
+                xmlItem.querySelector("title").innerHTML
+              );
               const link = xmlItem.querySelector("link").innerHTML;
               const descriptionData = xmlItem.querySelector("description")
                 .innerHTML;
