@@ -1,20 +1,20 @@
 import prettier from "prettier";
-import buildHtml from "./buildHtml.js";
+import feedDataToHtml from "./feedDataToHtml.js";
 
-test("builds html from parsed feeds", () => {
+test("builds html from parsed feed data", () => {
   const input = [
     {
       title: "Some feed title 1",
       items: [
         {
           title: "Some item title 1",
-          summary: "Some item summary 1",
-          link: "https://somelink1.com"
+          link: "https://somelink1.com",
+          summary: "Some item summary 1"
         },
         {
           title: "Some item title 2",
-          summary: "Some item summary 2",
-          link: "https://somelink2.com"
+          link: "https://somelink2.com",
+          summary: "Some item summary 2"
         }
       ]
     },
@@ -23,7 +23,6 @@ test("builds html from parsed feeds", () => {
       items: [
         {
           title: "Some item title 1",
-          summary: "Some item summary 1",
           link: "https://somelink1.com"
         }
       ]
@@ -37,14 +36,14 @@ test("builds html from parsed feeds", () => {
 
         <article>
           <h3>Some item title 1</h3>
-          <p>Some item summary 1</p>
           <a href="https://somelink1.com">Link</a>
+          <p>Some item summary 1</p>
         </article>
 
         <article>
           <h3>Some item title 2</h3>
-          <p>Some item summary 2</p>
           <a href="https://somelink2.com">Link</a>
+          <p>Some item summary 2</p>
         </article>
       </section>
 
@@ -53,7 +52,6 @@ test("builds html from parsed feeds", () => {
 
         <article>
           <h3>Some item title 1</h3>
-          <p>Some item summary 1</p>
           <a href="https://somelink1.com">Link</a>
         </article>
       </section>
@@ -65,7 +63,7 @@ test("builds html from parsed feeds", () => {
       parser: "html"
     });
 
-  expect(removeFormattingDiffs(buildHtml(input))).toBe(
+  expect(removeFormattingDiffs(feedDataToHtml(input))).toBe(
     removeFormattingDiffs(output)
   );
 });
