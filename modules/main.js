@@ -1,106 +1,126 @@
-import buildHtml from "./buildHtml/buildHtml.js";
+import titleDataToTitle from "./titleDataToTitle/titleDataToTitle.js";
+import descriptionDataToSummary from "./descriptionDataToSummary/descriptionDataToSummary.js";
+import feedDataToHtml from "./feedDataToHtml/feedDataToHtml.js";
 
 const main = async () => {
-  window.document.body.innerHTML = "<main><p>Loading...</p></main>";
+  try {
+    window.document.body.innerHTML = "<main><p>Loading...</p></main>";
 
-  /* Side effects TODO
-	const parsedUrl = new URL(window.location.href);
+    // Direct or via https://rss.app
+    const feeds = [
+      {
+        title: "IEEE",
+        url:
+          "https://csdl-api.computer.org/api/rss/periodicals/mags/so/rss.xml",
+        max: 3
+      },
+      {
+        title: "GitHub Trends",
+        url: "https://mshibanami.github.io/GitHubTrendingRSS/monthly/all.xml",
+        max: 10
+      },
+      {
+        title: "Reddit programming",
+        url: "https://rss.app/feeds/qtY5lEd1YADUScA0.xml",
+        max: 10
+      },
+      {
+        title: "Reddit coding",
+        url: "https://rss.app/feeds/rSBtOoUKZzZLp2C2.xml",
+        max: 10
+      },
+      {
+        title: "Reddit compsci",
+        url: "https://rss.app/feeds/BqegyvjAy3vdvC7j.xml",
+        max: 10
+      },
+      {
+        title: "Reddit unix",
+        url: "https://rss.app/feeds/qqTmcUPI2lpLwj7f.xml",
+        max: 10
+      },
+      {
+        title: "Reddit vim",
+        url: "https://rss.app/feeds/I5n8lIFHsWHIS6qM.xml",
+        max: 10
+      },
+      {
+        title: "Reddit git",
+        url: "https://rss.app/feeds/Cbf3VryLJL7H4Sbz.xml",
+        max: 10
+      },
+      {
+        title: "W3C recommendations",
+        url: "https://www.w3.org/TR/?status=rec",
+        max: 3
+      },
+      {
+        title: "Reddit webdev",
+        url: "https://rss.app/feeds/4iC7UIwfHOpXpl8S.xml",
+        max: 10
+      },
+      {
+        title: "TC39 proposals",
+        url: "https://tc39.es/#proposals",
+        max: 3
+      },
+      {
+        title: "Reddit javascript",
+        url: "https://rss.app/feeds/2LYlwYdC3LgjBWPj.xml",
+        max: 10
+      }
+    ];
 
-	const feedUrls = parsedUrl.searchParams.get("feedUrls");
-	const max = parsedUrl.searchParams.get("max");
-	*/
+    const parseFeeds = async feeds =>
+      await Promise.all(
+        feeds.map(async feed => {
+          const response = await window.fetch(feed.url);
+          const text = await response.text();
+          const parsedXml = new window.DOMParser().parseFromString(
+            text,
+            "text/xml"
+          );
+          const xmlItems = Array.from(parsedXml.querySelectorAll("item"));
 
-  /*
-	const fetchedFeeds = [
-	`<rss>
-	  <channel>
-	    <title>Fetched feed title 1</title>
-	    <item>
-	       <link>https://codepen.io/billgil/pen/ewqWzY</link>
-	       <title>A sad rain cloud</title>
-	       <dc:creator>Bill Gilmore</dc:creator>
-	    </item>
-	    <!-- a bunch more items -->
-	  </channel>
-	</rss>`,
-	`<rss>
-	  <channel>
-	    <title>Fetched feed title 2</title>
-	    <item>
-	       <link>https://codepen.io/billgil/pen/ewqWzY</link>
-	       <title>A sad rain cloud</title>
-	       <dc:creator>Bill Gilmore</dc:creator>
-	    </item>
-	    <!-- a bunch more items -->
-	  </channel>
-	</rss>`
-	]
-	*/
+          if (xmlItems.length === 0) {
+            return {
+              title: feed.title,
+              items: [
+                {
+                  title: "Index",
+                  link: feed.url
+                }
+              ]
+            };
+          }
 
-  const max = 3;
+          return {
+            title: feed.title,
+            items: xmlItems.slice(0, feed.max).map(xmlItem => {
+              const title = titleDataToTitle(
+                xmlItem.querySelector("title").innerHTML
+              );
+              const link = xmlItem.querySelector("link").innerHTML;
+              const descriptionData = xmlItem.querySelector("description")
+                .innerHTML;
+              const summary = descriptionDataToSummary(descriptionData);
 
-  const parseFeeds = async feedUrls =>
-    await Promise.all(
-      feedUrls.map(async feedUrl => {
-        const response = await window.fetch(feedUrl);
-        const text = await response.text();
-        const parsedXml = new window.DOMParser().parseFromString(
-          text,
-          "text/xml"
-        );
-        const xmlItems = Array.from(parsedXml.querySelectorAll("item"));
+              return {
+                title: title,
+                link: link,
+                summary: summary
+              };
+            })
+          };
+        })
+      );
 
-        return {
-          title: parsedXml.querySelector("title").innerHTML,
-          items: xmlItems.slice(0, max).map(xmlItem => ({
-            title: xmlItem.querySelector("title").innerHTML,
-            summary: "TODO",
-            link: xmlItem.querySelector("link").innerHTML
-          }))
-        };
-      })
-    );
+    const parsedFeeds = await parseFeeds(feeds);
 
-  const feedUrls = [
-    "https://mshibanami.github.io/GitHubTrendingRSS/monthly/all.xml",
-    "https://mshibanami.github.io/GitHubTrendingRSS/monthly/javascript.xml"
-  ];
-
-  /* Feeds TODO
-	-   General
-		-   [IEEE computing edge](https://www.computer.org/publications/computing-edge/current-issue)
-		-   [GitHub trends](https://github.com/trending?since=monthly)
-		-   [Reddit programming](https://www.reddit.com/r/programming/top/?t=month)
-		-   [Reddit coding](https://www.reddit.com/r/coding/top/?t=month)
-		-   [Reddit compsci](https://www.reddit.com/r/compsci/top/?t=month)
-		-   [Reddit commandline](https://www.reddit.com/r/commandline/top/?t=month)
-	-   Unix
-		-   [Community](https://www.reddit.com/r/unix/top/?t=month)
-	-   Vim
-		-   [Official](https://www.vim.org/news/news.php)
-		-   [Community](https://www.reddit.com/r/vim/top/?t=month)
-	-   Homebrew
-		-   [Official](https://brew.sh/blog)
-	-   Git
-		-   [Official](https://github.com/git/git/releases)
-		-   [Community](https://www.reddit.com/r/git/top/?t=month)
-	-   Web
-		-   [Official](https://www.w3.org/TR/?status=rec)
-		-   [Community](https://www.reddit.com/r/webdev/top/?t=month)
-	-   JavaScript
-		-   [Official](https://tc39.es/#proposals)
-		-   [Community](https://www.reddit.com/r/javascript/top/?t=month)
-	-   Web APIs
-		-   ...
-	-   WebAssembly
-		-   [Community](https://www.reddit.com/r/WebAssembly/top/?t=month)
-	*/
-
-  const parsedFeeds = await parseFeeds(feedUrls);
-
-  const builtHtml = buildHtml(parsedFeeds);
-
-  window.document.body.innerHTML = builtHtml;
+    window.document.body.innerHTML = feedDataToHtml(parsedFeeds);
+  } catch (error) {
+    window.document.body.innerHTML = "<main><p>There was an error.</p></main>";
+  }
 };
 
 main();

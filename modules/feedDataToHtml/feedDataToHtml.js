@@ -1,4 +1,4 @@
-const buildHtml = parsedFeeds => {
+const feedDataToHtml = parsedFeeds => {
   const itemsHtml = parsedFeeds
     .map(
       parsedFeed => `
@@ -7,11 +7,11 @@ const buildHtml = parsedFeeds => {
         ${parsedFeed.items
           .map(
             item => `
-        <article>
-          <h3>${item.title}</h3>
-          <p>${item.summary}</p>
-          <a href="${item.link}">Link</a>
-          </article>
+              <article>
+                <h3>${item.title}</h3>
+                <a href="${item.link}">Link</a>
+                ${item.summary ? `<p>${item.summary}</p>` : ""}
+              </article>
         `
           )
           .join("")}
@@ -27,4 +27,4 @@ const buildHtml = parsedFeeds => {
   `;
 };
 
-export default buildHtml;
+export default feedDataToHtml;
