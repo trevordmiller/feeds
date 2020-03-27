@@ -1,5 +1,5 @@
 {
-  "name": "extractcontent.com",
+  "name": "feeds",
   "version": "1.0.0",
   "engines": {
     "node": "12.x"
