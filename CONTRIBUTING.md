@@ -29,4 +29,3 @@ See [README.md](./README.md).
 - GitHub settings for branch protection and merge checks.
 - GitHub Actions for Continuous Integration and Continuous Deployment.
 - GitHub Pages for hosting.
-- Hover for custom domain name registration and DNS configuration.

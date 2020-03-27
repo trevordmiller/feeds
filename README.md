@@ -1,6 +1,8 @@
-# extractcontent.com ([https://extractcontent.com](https://extractcontent.com))
+# feeds
 
-Website for filtering out the fluff from content.
+Personal code feeds for study.
+
+Published at [https://trevordmiller.com/feeds](https://trevordmiller.com/feeds).
 
 ## Contributing
 
