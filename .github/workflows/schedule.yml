@@ -3,11 +3,24 @@ on:
   schedule:
     - cron: "0 0 * * *"
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: denolib/setup-deno@master
+        with:
+          deno-version: 0.x
+      - name: Test
+        run: ./scripts/test
+      - name: Lint
+        run: ./scripts/lint
   audit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Audit
         uses: treosh/lighthouse-ci-action@v2
         with:
