@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! [ -x "$(command -v deno)" ]; then
+  echo 'Error: deno needs to be installed' >&2
+  exit 1
+fi
+
+deno fmt

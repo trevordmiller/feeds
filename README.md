@@ -1,6 +1,6 @@
 # feeds
 
-Personal code feeds for study.
+Personal code news for study.
 
 Published at [https://trevordmiller.com/feeds](https://trevordmiller.com/feeds).
 
